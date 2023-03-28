@@ -14,9 +14,9 @@ export class AuthService {
   ) {}
 
   async login({ email, password }: LoginDto) {
-    const user = await this.userRepository.findOne({ where: { email } });
+    const user = await this.userRepository.findOne({ where: { email } , select :['id' , 'email' , 'password' , 'username'] });
     if (!user) throw Error('email not found');
-    const isMatch = bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw Error('email or password does not exist');
     const payload = {
       userId: user.id,

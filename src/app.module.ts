@@ -8,6 +8,7 @@ import { MessageModule } from './app/message/message.module';
 import { dataSourceOptions } from './database/data-source';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './app/user/user.module';
+import { RoomModule } from './app/room/room.module';
 
 require('dotenv').config();
 @Module({
@@ -17,6 +18,7 @@ require('dotenv').config();
     MessageModule,
     AuthModule,
     UserModule,
+    RoomModule,
     ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
