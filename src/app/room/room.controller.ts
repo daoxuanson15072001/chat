@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Request,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { RoomService } from './room.service';
 import { CreateRoomDto } from './dto/create-room.dto';
@@ -21,8 +22,8 @@ export class RoomController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/list')
-  getListRoomSended(@Request() req) {
-    return this.roomService.getListRoomSended(req.user?.userId);
+  getListRoomSended(@Request() req, @Query() query) {
+    return this.roomService.getListRoomSended(req.user?.userId, query);
   }
 
   @Post()
@@ -52,6 +53,11 @@ export class RoomController {
 
   @Get(':roomId/history')
   getChatHistory(@Param('roomId', ParseIntPipe) roomId: number) {
-    return this.roomService.getChatHistory(roomId)
+    return this.roomService.getChatHistory(roomId);
+  }
+
+  @Get(':roomId/last-message')
+  getLastMessage(@Param('roomId', ParseIntPipe) roomId: number) {
+    return this.roomService.getLastMessage(roomId);
   }
 }

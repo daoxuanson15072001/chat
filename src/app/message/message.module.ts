@@ -8,11 +8,13 @@ import { MessageService } from './message.service';
 import { MessageGateway } from './message.gateway';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
+import Room from 'src/database/entities/Room';
+import { UserRoom } from 'src/database/entities/UserRoom';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Message.name, schema: MessageSchema }]),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User , Room , UserRoom]),
   ],
   controllers: [MessageController],
   providers: [MessageService, MessageGateway, JwtService, UserService],

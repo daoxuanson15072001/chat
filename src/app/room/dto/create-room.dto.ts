@@ -1,3 +1,7 @@
 export class CreateRoomDto {
-    name : string;
+  name: string;
+}
+
+export class ListRoomDto {
+  keyword?: string;
 }
