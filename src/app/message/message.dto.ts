@@ -1,4 +1,6 @@
 export class CreateMessageDto {
-  text: string;
-  time: string;
+  senderId: number;
+  senderType?: number;
+  content: string;
+  roomId: number;
 }

@@ -1,11 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { RoomService } from './room.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { JwtAuthGuard } from '../auth/jwtAuth.guard';
 
 @Controller('room')
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/list')
+  getListRoomSended(@Request() req) {
+    return this.roomService.getListRoomSended(req.user?.userId);
+  }
 
   @Post()
   create(@Body() createRoomDto: CreateRoomDto) {
@@ -28,7 +46,12 @@ export class RoomController {
   }
 
   @Post(':roomId/add-user')
-  addUserToRoom(@Body() body , @Param('roomId' , ParseIntPipe) roomId : number) {
-    return this.roomService.addUserToRoom(body?.userIds , roomId);
+  addUserToRoom(@Body() body, @Param('roomId', ParseIntPipe) roomId: number) {
+    return this.roomService.addUserToRoom(body?.userIds, roomId);
+  }
+
+  @Get(':roomId/history')
+  getChatHistory(@Param('roomId', ParseIntPipe) roomId: number) {
+    return this.roomService.getChatHistory(roomId)
   }
 }

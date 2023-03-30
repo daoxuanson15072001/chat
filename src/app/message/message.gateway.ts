@@ -48,7 +48,7 @@ export class MessageGateway
 
   @SubscribeMessage('createMessage')
   async create(@MessageBody() params: CreateMessageDto) {
-    // const message = await this.messageService.createMessage(params);
+    const message = await this.messageService.createMessage(params);
     this.server.emit('message', params);
   }
 

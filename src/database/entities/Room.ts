@@ -13,7 +13,7 @@ export default class Room {
   @PrimaryGeneratedColumn({ name: 'id', type: 'int', unsigned: true })
   id: number;
 
-  @Column({ name: 'username', type: 'text' })
+  @Column({ name: 'name', type: 'text' })
   name: string;
 
   @Column({ name: 'description', type: 'text', nullable: true })
@@ -34,6 +34,9 @@ export default class Room {
     comment: '0: Inactive, 1: Active.',
   })
   status: number;
+
+  @Column({ name: 'avatar', type: 'varchar', length: 255, nullable: true })
+  avatar: string | null;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp', nullable: true })
   createdAt: Date;

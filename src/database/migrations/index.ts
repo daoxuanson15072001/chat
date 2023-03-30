@@ -1,3 +1,3 @@
-import { InitDatabase1679554333126 } from "./1679554333126-InitDatabase";
+import { InitDB1680062965475 } from './1680062965475-InitDB';
 
-export const DefaultMigrations = [InitDatabase1679554333126];
+export const DefaultMigrations = [InitDB1680062965475];

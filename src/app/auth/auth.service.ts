@@ -14,7 +14,10 @@ export class AuthService {
   ) {}
 
   async login({ email, password }: LoginDto) {
-    const user = await this.userRepository.findOne({ where: { email } , select :['id' , 'email' , 'password' , 'username'] });
+    const user = await this.userRepository.findOne({
+      where: { email },
+      select: ['id', 'email', 'password', 'username'],
+    });
     if (!user) throw Error('email not found');
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw Error('email or password does not exist');
@@ -24,7 +27,7 @@ export class AuthService {
     };
     const accessToken = this.jwtService.sign(payload, {
       secret: process.env.TOKEN_SECRET,
-      expiresIn: '120s',
+      expiresIn: '1d',
     });
     if (!user.refreshToken) {
       const newRefreshToken = this.jwtService.sign(payload, {
