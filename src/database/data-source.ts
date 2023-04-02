@@ -1,14 +1,16 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
+
 import { DefaultEntities } from './entities';
 import { DefaultMigrations } from './migrations';
+import { config } from 'src/constants/config';
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'mysql',
-  host: 'localhost',
-  port: 3306,
-  username: 'root',
-  password: 'Amela@123a@',
-  database: 'chat',
+  host: config.MYSQL.HOST,
+  port: config.MYSQL.PORT,
+  username: config.MYSQL.USER,
+  password: config.MYSQL.PASSWORD,
+  database: config.MYSQL.DB_NAME,
   synchronize: false,
   entities: [...DefaultEntities],
   migrations: [...DefaultMigrations],

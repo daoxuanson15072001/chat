@@ -10,6 +10,8 @@ import { CommonStatus } from 'src/enums/enum';
 import { In, Repository } from 'typeorm';
 import { CreateRoomDto, ListRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { ChatHistoryDto } from './dto/chat-history.dto';
+import { returnPaging } from 'src/utils/helper';
 
 @Injectable()
 export class RoomService {
@@ -71,12 +73,13 @@ export class RoomService {
         ]);
         return {
           ...item,
-          content: lastMessageByRoomId?.[0]?.['content'],
-          timeLastMessage: lastMessageByRoomId?.[0]?.['createdAt'],
+          lastMessage: lastMessageByRoomId?.[0],
         };
       }),
     );
-    return infoListRoom.sort((a,b) => b.timeLastMessage - a.timeLastMessage);
+    return infoListRoom.sort(
+      (a, b) => b?.lastMessage?.['createdAt'] - a?.lastMessage?.['createdAt'],
+    );
     // const listMessagebyRoom = await this.messageModel.aggregate([
     //   { $match: { senderId: userId } },
     //   { $sort: { createdAt: 1 } },
@@ -108,7 +111,13 @@ export class RoomService {
     return lastMessageByRoomId;
   }
 
-  async getChatHistory(roomId: number) {
-    return this.messageModel.find({ roomId }).sort({ createdAt: -1 });
+  async getChatHistory(roomId: number, params: ChatHistoryDto) {
+    const data = await this.messageModel
+      .find({ roomId })
+      .skip(params.skip)
+      .limit(params.take)
+      .sort({ createdAt: -1 });
+    const totalItems = await this.messageModel.count();
+    return returnPaging(data, totalItems, params);
   }
 }

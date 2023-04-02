@@ -15,6 +15,8 @@ import { RoomService } from './room.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { JwtAuthGuard } from '../auth/jwtAuth.guard';
+import { ChatHistoryDto } from './dto/chat-history.dto';
+import { assignPaging } from 'src/utils/helper';
 
 @Controller('room')
 export class RoomController {
@@ -52,8 +54,12 @@ export class RoomController {
   }
 
   @Get(':roomId/history')
-  getChatHistory(@Param('roomId', ParseIntPipe) roomId: number) {
-    return this.roomService.getChatHistory(roomId);
+  getChatHistory(
+    @Param('roomId', ParseIntPipe) roomId: number,
+    @Query() query: ChatHistoryDto,
+  ) {
+    assignPaging(query);
+    return this.roomService.getChatHistory(roomId, query);
   }
 
   @Get(':roomId/last-message')

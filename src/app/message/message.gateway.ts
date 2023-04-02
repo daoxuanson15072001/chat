@@ -17,6 +17,8 @@ import User from 'src/database/entities/User';
 import { UserService } from '../user/user.service';
 import { CreateMessageDto } from './message.dto';
 import { MessageService } from './message.service';
+import { v4 as uuidv4 } from 'uuid';
+
 @WebSocketGateway({
   cors: {
     origin: '*',
@@ -49,7 +51,11 @@ export class MessageGateway
   @SubscribeMessage('createMessage')
   async create(@MessageBody() params: CreateMessageDto) {
     const message = await this.messageService.createMessage(params);
-    this.server.emit('message', params);
+    this.server.emit('message', {
+      ...params,
+      _id: uuidv4(),
+      createdAt: new Date().toISOString(),
+    });
   }
 
   @SubscribeMessage('joinRoom')
@@ -57,7 +63,7 @@ export class MessageGateway
     this.server.emit('noti', `${name} ${client.id} da tham gia phong thoai`);
     return true;
   }
-  
+
   afterInit(server: Server) {
     this.logger.log('Init');
   }
