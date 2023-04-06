@@ -1,6 +1,7 @@
 import { LiteralObject } from '@nestjs/common';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { MessageType } from 'src/enums/enum';
 
 export type MessageDocument = HydratedDocument<Message>;
 
@@ -17,6 +18,9 @@ export class Message {
 
   @Prop({ name: 'content', type: 'string', required: true })
   content: string;
+
+  @Prop({ name: 'message_type', type: 'number', default: MessageType.TEXT })
+  messageType: string;
 
   @Prop({ type: mongoose.Schema.Types.Mixed })
   payload: LiteralObject;
